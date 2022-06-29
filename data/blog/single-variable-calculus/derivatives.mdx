@@ -26,10 +26,39 @@ Geometric definition
 
 ![d-2](/static/images/calculus/d-2.png)
 
-infinite approximation means: $$\Delata x to 0$$
+infinite approximation means: $$\Delata x \to 0$$
 
 $$
 \lim_{\Delta x \to 0}\frac{\Delta f}{\Delta x}
 = \lim_{\Delta x \to 0}\frac{f(x_0 + \Delta x) - f(x_0)}{\Delta x}
 = f'(x_0)
+$$
+
+### Example 1
+
+$$
+f(x) = \frac{1}{x}
+$$
+
+**derivative**:
+
+$$
+
+\lim_{\Delta x \to 0}\frac{\Delta f}{\Delta x}
+= \lim_{\Delta x \to 0}\frac{\frac{1}{x + \Delta x} - \frac{1}{x}}{\Delta x}
+= \lim_{\Delta x \to 0}\frac{x - (x + \Delta x)}{x \Delta x (x + \Delta x)}
+= \lim_{\Delta x \to 0} - \frac{x}{x(x + \Delta x}
+$$
+
+Take the limit as $$\Delta x \to 0$$,
+
+$$
+\lim_{\Delta x \to 0} - \frac{x}{x(x + \Delta x}
+= - \frac{1}{x^2}
+$$
+
+Hence,
+
+$$
+f'(x) = - \frac{1}{x^2}
 $$
