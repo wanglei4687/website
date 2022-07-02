@@ -24,27 +24,27 @@ authors: ['Wang Lei']
 
 - 设计文档的标题
 
-设计的目标是什么（比如：[CEP-15: General Purpose Transactions](https://cwiki.apache.org/confluence/display/CASSANDRA/CEP-15%3A+General+Purpose+Transactions)）
+  设计的目标是什么（比如：[CEP-15: General Purpose Transactions](https://cwiki.apache.org/confluence/display/CASSANDRA/CEP-15%3A+General+Purpose+Transactions)）
 
 - 作者和相关人员
 
-设计文档的作者，计划从事此项目的人员列表
+  设计文档的作者，计划从事此项目的人员列表
 
 - 文档的审阅者
 
-文档审阅者，审阅文档设计的问题（比如：鲁棒性等） 
+  文档审阅者，审阅文档设计的问题（比如：鲁棒性等）
 
 - 文档的创建日期和更新日期
 
-文档在什么时间创建的，和最新一次的更新时间
+  文档在什么时间创建的，和最新一次的更新时间
 
 - 文档的状态
 
-进行中（In progress), 起草阶段（draft），已完成（complete）等
+  进行中（In progress), 起草阶段（draft），已完成（complete）等
 
 ## 概述
 
-团队成员应该通过阅读概述来决定这个设计是否有阅读和理解的必要，最多为3段
+团队成员应该通过阅读概述来决定这个设计是否有阅读和理解的必要, 以及了解和自己（团队成员）的工作的关联程度，最多为3段
 
 ## 语境（context）
 
@@ -65,12 +65,12 @@ authors: ['Wang Lei']
 
 ```text
 Start Date： July 2, 2022
-MileStone 1 - CDC pipeline build: July 20, 2022
-MileStone 2 - Migrate data to new system: July 31, 2022
+Milestone 1 - CDC pipeline build: July 20, 2022
+Milestone 2 - Migrate data to new system: July 31, 2022
 End Date: Add feature X to new system: August 10, 2022
 ```
 
-如果里程碑的预计到达时间（ETA：Estimated Time of Arrival）发生了变化，添加一个`[update]`的小节来对项目相关的人员查看和重新估计
+如果里程碑的预计到达时间（ETA：Estimated Time of Arrival）发生了变化，添加一个`[update]`的小节提供给项目相关的人员查看和重新估计
 
 ## 现有的解决方案（Existing Solution）
 
@@ -81,7 +81,7 @@ End Date: Add feature X to new system: August 10, 2022
 
 ## 建议的解决方案（Proposed Solution）/技术架构
 
-尝试通过用户故事来具化解决方案的目标，尽量（随意）添加子部分和图表。
+可以尝试通过用户故事来具化解决方案的目标，尽量（随意）添加子部分和图表。
 
 先提供一个大的方向图，然后填写更多细节。确保其他的工程师可以理解它并按照描述的那样实施解决方案。
 
@@ -94,8 +94,7 @@ End Date: Add feature X to new system: August 10, 2022
 ## 可测试性，监控和警报（Testability, Monitoring and Alerting）
 
 程序如何测试，监控指标和警报的阈值等。这里需要提供足够的边界测试，端到端测试，单元测试。
-这里说一点所有这些都是确保在程序失败的时候提供追踪的方法和路径（即使是flaky test），也是确定软件的
-边界/系统边界。
+这里说一点所有这些都是确保在程序失败的时候提供追踪的方法和路径（即使是flaky test），也是确定软件的边界/系统边界。
 
 ## 跨团队影响
 
@@ -147,7 +146,7 @@ End Date: Add feature X to new system: August 10, 2022
 
 ### 做假期测试
 
-如果在没有互联网访问的情况下，团队中的某个人可以更具文档并按照设计意图实施吗？
+如果在没有互联网访问的情况下，团队中的某个人可以根据文档并按照设计意图实施吗？
 设计文档的主要目标不是知识共享，但这是一种评估清晰度的好方法，以便其他人可以为你提供
 有用的反馈。
 
@@ -158,10 +157,10 @@ End Date: Add feature X to new system: August 10, 2022
 
 首先，从事项目的每个人（项目中的所有成员）都应该是设计过程的一部分，每个人都应该参与讨论并接受设计。
 设计过程并不意味着白板化的想法，并随意动手制作潜在解决方案的原型。但应该随意编写一些一次性的原型代码
-来验证想法，为确保只编写探索性的代码，取保原型代码的中任何一个提交都不会合并到主要分支。
+来验证想法，为确保只编写探索性的代码，确保原型代码的中任何一个提交都不会合并到主要分支。
 
 
-步骤： 
+步骤：
 
 1. 请团队中经验丰富的工程师或者技术负责人担任审阅者，理想情况下应该是受团队认可的（或熟悉问题边界的人）
 2. 走进一间带白板的会议室
@@ -188,3 +187,8 @@ End Date: Add feature X to new system: August 10, 2022
 5. 你决定停止这个项目的工作并优先考虑其他工作
 
 设计文档的目标是确保完成正确的工作。在上面的例子中，感谢这个设计文档，而不是浪费几个月的时间来中止这个项目，你只花了8天。这似乎是一个非常成功的结果。
+
+
+## Refs
+
+- [How to write a good software design doc](How to write a good software design doc)
