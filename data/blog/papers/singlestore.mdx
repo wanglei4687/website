@@ -1,0 +1,29 @@
+---
+title: '论文 SingleStore (SIGMOD 2022)'
+date: '2022-07-05'
+tags: ['htap', 'database']
+draft: false
+summary: 'Cloud-Native Transactions and Analytics in SingleStore'
+canonicalUrl: https://github.com/wanglei4687/website/blob/main/data/blog/papers/singlestore.mdx
+---
+
+<TOCInline toc={props.toc} asDisclosure />
+
+[SingleStore](https://www.singlestore.com/) (S2DB)以前是[MemSQL](https://github.com/memsql)
+
+DOI: https://doi.org/10.1145/3514221.3526055
+
+首先介绍了数据库的几种负载
+
+- 事务（transaction processing)
+- 数仓（data warehousing）
+- 时间序列分析（time series analysis)
+- 全文检索（full-text search）
+- 数据湖 （data lakes）
+- 内存缓存（in-memory caching)
+- 文档存储（document storage）
+- 队列（queuing）
+- 图处理（graph processing）
+- 异地复制（geo-replicated）
+
+🧐从我的角度来说流是一个很重要的方向，其实`HTAP`的处理也可以看作是在流上做分析和处理。数据湖这里的问题还是在与处理`update`操作消耗很大，其中数据湖对与`TP`的性能支持也会有很大的开发难度。异地复制主要的问题在于延迟的问题，即使通过类似`SD-WAN`、`RDMA`等网络技术直连。了解这个数据库也是应为它与我司开发的超融合数据库有借鉴意义，对于不同的负载实际过程中怎么调度是个很难的问题（特别是考虑到云上环境的问题）。借助于公有云厂商提供的基础设施服务，类似对象存储（`s3`, `blob`)和弹性块存储(EBS)允许数据库利用几乎无限的、高可用的和持久的数据存储。
