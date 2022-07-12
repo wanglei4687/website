@@ -13,7 +13,7 @@ canonicalUrl: https://github.com/wanglei4687/website/blob/main/data/blog/papers/
 
 DOI: https://doi.org/10.1145/3514221.3526055
 
-# intro
+## Introduction
 
 首先介绍了数据库的几种负载
 
@@ -28,7 +28,7 @@ DOI: https://doi.org/10.1145/3514221.3526055
 - 图处理（graph processing）
 - 异地复制（geo-replicated）
 
-🧐从我的角度来说流是一个很重要的方向，其实`HTAP`的处理也可以看作是在流上做分析和处理。数据湖(`iceberg`, `hudi`等)这里的问题还是在与处理`update`操作消耗很大，其中数据湖对与`TP`的性能支持也会有很大的开发难度。异地复制主要的问题在于延迟的问题，即使通过类似`SD-WAN`、`RDMA`等网络技术直连。
+🧐从我的角度来说流是一个很重要的方向，其实`HTAP`的处理也可以看作是在流上做分析和处理。数据湖(`iceberg`, `hudi`等)这里的问题还是在与处理`update`操作消耗很大，其中数据湖对与`TP`的性能支持也会有很大的开发难度。异地复制主要的问题在于延迟的问题，即使通过类似`SD-WAN`、`RDMA`等技术直连。
 
 下图就是`azure`的异地复制的典型配置。
 
@@ -41,3 +41,39 @@ DOI: https://doi.org/10.1145/3514221.3526055
 1. 云原生架构的设计利用了弹性云基础设施
 
    对象存储（`s3`, `blob`)和弹性块存储(EBS)允许数据库利用几乎无限的、高可用的和持久的数据存储。
+
+2. 数据量的增加，并希望以更低的延迟和更高的吞吐访问
+
+S2DB通过将冷数据放入blob存储（或S3)存储和智能的使用本地状态（local state）来减少网络的消耗，这样可以支持更加广泛的工作负载，`iceberg`这种也是建立在`s3 `上的存储引擎。可以方便的利用`S3`的可靠性和经济性。
+
+
+### 计算和存储分离（Separation of storage and compute）
+
+S2DB可以通过数据热度来使用不同的存储（本地内存，本地磁盘和S3/blob 存储）
+
+1. 冷数据存储在blob存储中，而本地存储保存更多最近的查询数据
+
+2. 在blob存储中保留存储的历史（可以包括删除的数据），可以支持从任意时间点恢复数据，但不用显式备份和复制任何数据
+
+3. 可以从blob储存中支持多个只读副本，而不影响数据库的读写主副本。
+
+### 统一表存储（Unified table storage）
+
+`OLAP`和`OLTP`都使用统一的表存储，避免`HTAP`的表的转换。
+
+
+## S2DB背景
+
+S2DB是`horizontally-partitioned`, `shared-nothing`的数据库。分为两个部分
+
+- **Aggregator nodes** 协调查询（plan，parse）
+- **Leaf nodes** 保存数据分区副本，处理查询的计算
+
+每个leaf node都保留几个数据分区，每个分区要么是一个主分区，它可以同时服务于读写，要么是一个副本，它只能服务于读。
+
+
+shard key（分区键）: 一组用户可配置列进行哈希分区（shard key），表可以实现跨分区分布。有利于更快地执行点读（`point reads`)查询和`sharp query`也不用在leaves之间移动数据。
+当执行`join`和`group by`操作的时候匹配它们引用的表的`shard key`，S2DB下推（push down）执行到各自的分区以避免数据的移动。S2DB还支持通过中间字节码生成针对LLVM的完整查询代码。
+
+
+![s2db02](/static/images/s2db/s2db02.png)
