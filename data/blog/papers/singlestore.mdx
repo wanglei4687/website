@@ -1,6 +1,7 @@
 ---
 title: '论文 SingleStore (SIGMOD 2022)'
 date: '2022-07-05'
+lastmod: ''20222-07-17'
 tags: ['htap', 'database']
 draft: false
 summary: 'Cloud-Native Transactions and Analytics in SingleStore'
@@ -28,7 +29,8 @@ DOI: https://doi.org/10.1145/3514221.3526055
 - 图处理（graph processing）
 - 异地复制（geo-replicated）
 
-🧐从我的角度来说流是一个很重要的方向，其实`HTAP`的处理也可以看作是在流上做分析和处理。数据湖(`iceberg`, `hudi`等)这里的问题还是在与处理`update`操作消耗很大，其中数据湖对与`TP`的性能支持也会有很大的开发难度。异地复制主要的问题在于延迟的问题，即使通过类似`SD-WAN`、`RDMA`等技术直连。
+🧐从我的角度来说流是一个很重要的方向，其实`HTAP`的处理也可以看作是在流上做分析和处理。数据湖(`iceberg`, `hudi`等)这里的问题还是在与处理`update`操作消耗很大，
+其中数据湖对于`TP`的性能支持也会有很大的开发难度。异地复制主要的问题在于延迟的问题，即使通过类似`SD-WAN`、`RDMA`等技术直连。
 
 下图就是`azure`的异地复制的典型配置。
 
@@ -73,7 +75,33 @@ S2DB是`horizontally-partitioned`, `shared-nothing`的数据库。分为两个�
 
 
 shard key（分区键）: 一组用户可配置列进行哈希分区（shard key），表可以实现跨分区分布。有利于更快地执行点读（`point reads`)查询和`sharp query`也不用在leaves之间移动数据。
-当执行`join`和`group by`操作的时候匹配它们引用的表的`shard key`，S2DB下推（push down）执行到各自的分区以避免数据的移动。S2DB还支持通过中间字节码生成针对LLVM的完整查询代码。
-
+当执行`join`和`group by`操作的时候匹配它们引用的表的`shard key`，S2DB下推（push down）执行到各自的分区以避免数据的移动。S2DB还支持通过中间字节码生成针对LLVM的完整查询代码。可以瞅瞅另一篇文章[shard key](https://website-wanglei4687.vercel.app/blog/database/shard-key)
 
 ![s2db02](/static/images/s2db/s2db02.png)
+
+S2DB通过在集群中的不同节点上存储每个分区的多个副本来维护高可用性(HA)。默认情况下，当事务在主分区上提交时，数据会同步复制到副本，读操作不会运行在HA的副本上。
+
+
+### 表格式存储
+
+内存中的行存依靠[无锁的跳表](http://www.cse.yorku.ca/~ruppert/papers/lfll.pdf)
+
+#### 行存储
+
+S2DB内存行存储表中的每个索引都使用一个无锁的跳表来索引行。
+跳表中的一个节点对应于一行，每个节点存储行版本的链接列表，以实现多版本并发控制，以便读取操作不需要等待写入操作。
+
+写操作使用悲观并发控制，使用存储在每个跳表节点上的行锁实现，以处理对同一行的并发写操作。
+
+
+### 列存储
+
+列存储表中的数据被组织成段（segment），其中每个段将不相交的行子集（disjoint subset of rows as a set ）存储为磁盘上的一组数据文件。
+在一个段中，每个列都按相同的行顺序存储，但分别进行压缩。段元数据存储在一个持久的内存行存储表中，包含文件位置、编码和每个列的最小/最大值等信息。
+如果指定，每个段中的行都是完全按照排序键排序的。段之间的排序顺序类似于LSM树 （log-structed-merge tree)。
+
+## 存算分离（Separation of storage and compute）
+
+数据的存储分两个阶段，第一个阶段是暂存数据到本地盘，第二个阶段是异步刷到对象存储（blob storage）。
+
+![s2db03](/static/images/s2db/s2db03.png)
