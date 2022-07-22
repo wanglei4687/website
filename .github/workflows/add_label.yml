@@ -1,4 +1,4 @@
-name: labeler
+name: add_label
 
 on:
   pull_request:
@@ -9,6 +9,7 @@ on:
 jobs:
   add_label:
     runs-on: ubuntu-latest
+    name: add_label
     steps:
       - uses: action/checkout@v3
 
