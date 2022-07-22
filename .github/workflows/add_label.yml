@@ -1,0 +1,69 @@
+name: labeler
+
+on:
+  pull_request:
+    types: opened
+  issue_opened:
+    types: opened
+
+jobs:
+  add_label:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: action/checkout@v3
+
+      - uses: actions-ecosystem/action-add-labels@v1
+        if: ${{ startsWith(github.event.comment.body, '/merge') }}
+        with:
+          labels: action/merge
+
+      - uses: action-ecosystem/action-add-labels@v1
+        if: ${{ startsWith(github.event.comment.body, '/blog') }}
+        with:
+          labels: type/blog
+
+
+      - uses: action-ecosystem/action-add-labels@v1
+        if: ${{ startsWith(github.event.comment.body, '/paper') }}
+        with:
+          labels: type/paper
+
+      - uses: action-ecosystem/action-add-labels@v1
+        if: ${{ startsWith(github.event.comment.body, '/project') }}
+        with:
+          labels: type/project
+
+      - uses: action-ecosystem/action-add-labels@v1
+       if: ${{ startsWith(github.event.comment.body, '/reading') }}
+       with:
+         labels: type/reading
+
+      - uses: action-ecosystem/action-add-labels@v1
+        if: ${{ startsWith(github.event.comment.body, '/lang-go') }}
+        with:
+          labels: language/go
+
+      - uses: action-ecosystem/action-add-labels@v1
+        if: ${{ startsWith(github.event.comment.body, '/lang-rust') }}
+        with:
+          labels: language/rust
+
+      - uses: action-ecosystem/action-add-labels@v1
+        if: ${{ startsWith(github.event.comment.body, '/lang-python') }}
+        with:
+          labels: language/python
+
+      - use: action-ecosystem/action-add-labels@v1
+        if: ${{ startsWith(github.event.comment.body, '/ml') }}
+        with:
+          labels: part/machine-learning
+
+      - use: action-ecosystem/action-add-labels@v1
+        if: ${{ startsWith(github.event.comment.body, '/db') }}
+        with:
+          labels: part/database
+
+      - use: action-ecosystem/action-add-labels@v1
+        if: ${{ startsWith(github.event.comment.body, '/math') }}
+        with:
+          labels: part/mathematics
