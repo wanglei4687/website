@@ -2,9 +2,9 @@ name: add_label
 
 on:
   pull_request:
-    types: opened
+    types: [opened]
   issue_opened:
-    types: opened
+    types: [opened]
 
 jobs:
   add_label:
