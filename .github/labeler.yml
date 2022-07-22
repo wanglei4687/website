@@ -12,3 +12,5 @@ labels:
     title: "BLOG.*"
   - label: "type/refactor"
     title: "REFACTOR.*"
+  - label: "type/feature"
+    title: "FEATURE.*"
