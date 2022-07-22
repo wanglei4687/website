@@ -1,4 +1,4 @@
-name: add_label
+name: add label
 
 on:
   issue_comment:
