@@ -5,8 +5,8 @@ on:
     types: [created]
 
 jobs:
-  rebase:
-    name: rebase
+  pr-rebase:
+    name: pr-rebase
     if: >-
       github.event.issue.pull_request != '' &&
       (
